@@ -11,6 +11,7 @@ Vagrant.configure("2") do |config|
     n1.vm.box = "ubuntu/bionic64"
     n1.vm.network "private_network", ip: "10.128.10.11"
     n1.vm.hostname = "ns1"
+    n1.vm.provision "file", source: "ns1-hostctl.sh", destination: "/home/vagrant/"
     n1.vm.provision :shell, privileged: true, inline: $configure_primary_nameserver
   end
   
@@ -18,6 +19,7 @@ Vagrant.configure("2") do |config|
     n2.vm.box = "ubuntu/bionic64"
     n2.vm.network "private_network", ip: "10.128.20.12"
     n2.vm.hostname = "ns2"
+    n2.vm.provision "file", source: "ns2-hostctl.sh", destination: "/home/vagrant/"
     n2.vm.provision :shell, privileged: true, inline: $configure_secondary_nameserver
   end
 
@@ -194,6 +196,10 @@ systemctl restart bind9
 
 # allow bind in firewall
 ufw allow Bind9
+
+# ns-hostctl
+mv /home/vagrant/ns1-hostctl.sh /usr/local/bin/ns-hostctl
+chmod +x /usr/local/bin/ns-hostctl
 SCRIPT
 
 $configure_secondary_nameserver = <<-SCRIPT
@@ -265,6 +271,10 @@ systemctl restart bind9
 
 # allow bind in firewall
 ufw allow Bind9
+
+# ns-hostctl
+mv /home/vagrant/ns2-hostctl.sh /usr/local/bin/ns-hostctl
+chmod +x /usr/local/bin/ns-hostctl
 SCRIPT
 
 $configure_hosts = <<-SCRIPT
