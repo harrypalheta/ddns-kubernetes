@@ -15,7 +15,6 @@ This is a configuration for dynamic DNS on a local network integrated with Kuber
 
 * Vagrant 2.2.9
 * VirtualBox 5.2 or superior
-* Bash 4.4.20 or superior
 
 ## Run infrastructure
 
